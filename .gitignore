@@ -1,0 +1,26 @@
+# node_modules
+node_modules
+backend/node_modules
+
+# Environment
+.env
+backend/.env
+
+# Local Uploads
+backend/uploads
+backend/temp
+
+# Build
+dist
+dist-ssr
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
