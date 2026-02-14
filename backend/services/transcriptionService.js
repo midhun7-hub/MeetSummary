@@ -1,31 +1,41 @@
 const axios = require('axios');
 const fs = require('fs');
 
-const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
+let ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
+if (ASSEMBLYAI_API_KEY) ASSEMBLYAI_API_KEY = ASSEMBLYAI_API_KEY.trim();
+
+if (!ASSEMBLYAI_API_KEY) {
+    console.warn('[Backend - AssemblyAI] WARNING: ASSEMBLYAI_API_KEY is missing in process.env');
+}
+
 const ASSEMBLYAI_URL = 'https://api.assemblyai.com/v2';
 
 const headers = {
     authorization: ASSEMBLYAI_API_KEY,
 };
 
-/**
- * Uploads audio file to AssemblyAI
- * @param {string} filePath - Path to the audio file
- * @returns {Promise<string>} - The upload URL
- */
 const uploadAudio = async (filePath) => {
     try {
         console.log(`[Backend - AssemblyAI] Uploading file: ${filePath}`);
         const audioData = fs.readFileSync(filePath);
 
         const response = await axios.post(`${ASSEMBLYAI_URL}/upload`, audioData, {
-            headers: headers
+            headers: {
+                ...headers,
+                'Content-Type': 'application/octet-stream'
+            },
+            maxBodyLength: Infinity,
+            maxContentLength: Infinity
         });
 
         console.log(`[Backend - AssemblyAI] Upload complete. URL: ${response.data.upload_url}`);
         return response.data.upload_url;
     } catch (error) {
         console.error(`[Backend - AssemblyAI] Upload Error: ${error.message}`);
+        if (error.response) {
+            console.error('[Backend - AssemblyAI] Response status:', error.response.status);
+            console.error('[Backend - AssemblyAI] Response data:', error.response.data);
+        }
         throw error;
     }
 };
@@ -42,9 +52,13 @@ const transcribeAudio = async (audioUrl) => {
         // 1. Submit transcription request
         const response = await axios.post(`${ASSEMBLYAI_URL}/transcript`, {
             audio_url: audioUrl,
-            language_detection: true, // As requested in snippet
-            speech_models: ["universal-3-pro", "universal-2"] // As requested in snippet
-        }, { headers });
+            speech_models: ["universal-3-pro"]
+        }, {
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json'
+            }
+        });
 
         const transcriptId = response.data.id;
         console.log(`[Backend - AssemblyAI] Transcription started. ID: ${transcriptId}`);
@@ -68,6 +82,10 @@ const transcribeAudio = async (audioUrl) => {
         }
     } catch (error) {
         console.error(`[Backend - AssemblyAI] Transcription Error: ${error.message}`);
+        if (error.response) {
+            console.error('[Backend - AssemblyAI] Response status:', error.response.status);
+            console.error('[Backend - AssemblyAI] Response data:', error.response.data);
+        }
         throw error;
     }
 };

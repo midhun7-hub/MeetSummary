@@ -50,6 +50,7 @@ const transcribeMeeting = async (req, res) => {
 // @route   POST /api/meetings/summarize
 // @access  Private
 const summarizeMeeting = async (req, res) => {
+    let localPaths = [];
     try {
         const { transcript, userNotes, images } = req.body;
 
@@ -62,30 +63,40 @@ const summarizeMeeting = async (req, res) => {
 
         // If files are uploaded (images or PDFs)
         if (req.files && req.files.length > 0) {
-            console.log(`[Backend - Controller] Uploading ${req.files.length} files to Cloudinary...`);
+            localPaths = req.files.map(f => f.path);
+            console.log(`[Backend - Controller] Processing ${req.files.length} uploaded files...`);
+
             for (const file of req.files) {
-                // Cloudinary upload with auto-detection for PDFs
-                const result = await cloudinary.uploader.upload(file.path, {
-                    folder: 'meeting_summarizer_files',
-                    resource_type: 'auto'
-                });
-                imageUrls.push(result.secure_url);
-                // Cleanup local
-                if (fs.existsSync(file.path)) {
-                    fs.unlinkSync(file.path);
+                try {
+                    // Try Cloudinary but don't crash if keys are missing/invalid
+                    if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_CLOUD_NAME !== 'your_cloud_name') {
+                        const result = await cloudinary.uploader.upload(file.path, {
+                            folder: 'meeting_summarizer_files',
+                            resource_type: 'auto'
+                        });
+                        imageUrls.push(result.secure_url);
+                    } else {
+                        console.warn('[Backend - Controller] Skipping Cloudinary upload (placeholders in .env)');
+                    }
+                } catch (cloudErr) {
+                    console.error(`[Backend - Controller] Cloudinary Upload Warning: ${cloudErr.message}`);
+                    // We continue because we can use local files for Gemini
                 }
             }
         } else if (images && Array.isArray(images)) {
             imageUrls = images;
         }
 
-        // 3. Summarize (Gemini Multimodal)
-        console.log('[Backend - Controller] Generating Multimodal Summary (Optional Audio)...');
-        const summaryText = await generateSummary(transcript || '', userNotes || '', imageUrls);
+        // 3. Summarize (Gemini Multimodal - using local files too)
+        console.log('[Backend - Controller] Generating Multimodal Summary...');
+        const summaryText = await generateSummary(transcript || '', userNotes || '', imageUrls, localPaths);
 
-        // 4. Extract Title
-        const titleMatch = summaryText.match(/Main Heading:\s*(.*)/);
-        const meetingTitle = titleMatch ? titleMatch[1].trim() : 'New Meeting';
+        // 4. Extract Title (Support both formats)
+        let meetingTitle = 'New Meeting';
+        const titleMatch1 = summaryText.match(/Main Heading:\s*(.*)/);
+        const titleMatch2 = summaryText.match(/^#\s*(.*)/m);
+        if (titleMatch1) meetingTitle = titleMatch1[1].trim();
+        else if (titleMatch2) meetingTitle = titleMatch2[1].trim();
 
         // 5. Save to DB with User ID
         const newMeeting = new Meeting({
@@ -93,18 +104,28 @@ const summarizeMeeting = async (req, res) => {
             title: meetingTitle,
             transcript: transcript,
             userNotes: userNotes || '',
-            imageUrls: imageUrls,
+            imageUrls: imageUrls, // Might be empty if no Cloudinary
             summary: summaryText
         });
 
         await newMeeting.save();
-        console.log(`[Backend - Controller] Meeting saved with ID: ${newMeeting._id} for User: ${req.user.id}`);
+        console.log(`[Backend - Controller] Meeting saved with ID: ${newMeeting._id}`);
+
+        // Cleanup local files
+        localPaths.forEach(p => {
+            if (fs.existsSync(p)) fs.unlinkSync(p);
+        });
 
         res.status(201).json(newMeeting);
 
     } catch (error) {
-        console.error(`[Backend - Controller] Summarize Error: ${error.message}`);
-        res.status(500).json({ message: error.message });
+        console.error('--- SUMMARIZE ERROR START ---');
+        console.error(`[Backend - Controller] Error: ${error.message}`);
+        // Cleanup local files on error
+        localPaths.forEach(p => {
+            if (fs.existsSync(p)) fs.unlinkSync(p);
+        });
+        res.status(500).json({ message: error.message || 'Error generating summary' });
     }
 };
 

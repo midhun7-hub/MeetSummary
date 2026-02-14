@@ -1,29 +1,39 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
-import { Cpu, Shield, Zap, Database } from 'lucide-react';
+import { Cpu, Shield, Zap, Database, FileText, Image, Mic, StickyNote } from 'lucide-react';
 
 const About = () => {
     const features = [
         {
-            icon: <Zap className="w-6 h-6 text-yellow-400" />,
-            title: "Instant Transcription",
-            desc: "Powered by AssemblyAI, we convert your audio to text with high accuracy in seconds."
+            icon: <Mic className="w-6 h-6 text-yellow-400" />,
+            title: "Audio Transcription",
+            desc: "Powered by AssemblyAI, we convert your meeting recordings to text with high accuracy in seconds."
+        },
+        {
+            icon: <Image className="w-6 h-6 text-pink-400" />,
+            title: "Image & PDF OCR",
+            desc: "Upload whiteboard photos, slides, or PDF documents. Our AI extracts and analyzes the content automatically."
+        },
+        {
+            icon: <StickyNote className="w-6 h-6 text-green-400" />,
+            title: "Manual Notes",
+            desc: "Add your own notes alongside audio and images. Everything gets combined into one comprehensive summary."
         },
         {
             icon: <Cpu className="w-6 h-6 text-blue-400" />,
-            title: "AI Summarization",
-            desc: "Google Gemini 1.5 Pro analyzes the transcript to extract key points, action items, and executive summaries."
+            title: "Multimodal AI Summarization",
+            desc: "Google Gemini analyzes audio transcripts, notes, images, and PDFs together to create structured summaries with action items."
         },
         {
-            icon: <Database className="w-6 h-6 text-green-400" />,
+            icon: <Database className="w-6 h-6 text-purple-400" />,
             title: "Secure Storage",
-            desc: "Your data is safely stored in MongoDB, ensuring you can access your history anytime."
+            desc: "Your data is safely stored in MongoDB with user authentication, ensuring you can access your history anytime."
         },
         {
-            icon: <Shield className="w-6 h-6 text-purple-400" />,
+            icon: <Shield className="w-6 h-6 text-indigo-400" />,
             title: "Private & Safe",
-            desc: "We prioritize your privacy with secure authentication and data handling practices."
+            desc: "We prioritize your privacy with JWT authentication, secure file handling, and encrypted data transmission."
         }
     ];
 
@@ -39,7 +49,7 @@ const About = () => {
                 >
                     <h1 className="text-4xl font-bold mb-6 text-center">About MeetSummary</h1>
                     <p className="text-xl text-gray-400 text-center mb-16 max-w-2xl mx-auto">
-                        MeetSummary is designed to make your meetings more productive by handling the note-taking for you.
+                        MeetSummary is a multimodal AI assistant that transforms your meetings into actionable insights by combining audio, images, PDFs, and notes.
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-8">
@@ -63,11 +73,31 @@ const About = () => {
                     <div className="mt-16 p-8 glass-panel rounded-2xl bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/20">
                         <h2 className="text-2xl font-bold mb-4">How it Works</h2>
                         <ol className="list-decimal list-inside space-y-4 text-gray-300">
-                            <li><strong>Record or Upload</strong>: Use the built-in recorder or upload an existing audio file.</li>
+                            <li><strong>Record or Upload Audio</strong>: Use the built-in recorder or upload an existing audio file (optional).</li>
+                            <li><strong>Add Notes & Files</strong>: Type manual notes and drag-and-drop images, whiteboards, or PDF documents.</li>
                             <li><strong>Transcribe</strong>: Our speech-to-text engine converts audio into a verbatim transcript.</li>
-                            <li><strong>Summarize</strong>: The AI analyzes the text to identify the most important information.</li>
-                            <li><strong>Archive</strong>: Everything is saved to your history for future reference.</li>
+                            <li><strong>Multimodal Analysis</strong>: Gemini AI analyzes all inputs together—transcript, notes, images, and PDFs.</li>
+                            <li><strong>Generate Summary</strong>: Get a structured summary with executive overview, key discussion points, and action items.</li>
+                            <li><strong>Archive & Access</strong>: Everything is saved to your history with searchable titles for future reference.</li>
                         </ol>
+                    </div>
+
+                    <div className="mt-8 p-6 glass-panel rounded-2xl bg-gradient-to-br from-green-900/20 to-teal-900/20 border border-green-500/20">
+                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                            <FileText className="w-6 h-6 text-green-400" />
+                            Flexible Input Options
+                        </h2>
+                        <p className="text-gray-300 mb-3">
+                            MeetSummary works with any combination of inputs:
+                        </p>
+                        <ul className="list-disc list-inside space-y-2 text-gray-400">
+                            <li>Audio only (traditional meeting recording)</li>
+                            <li>Notes only (quick text summaries)</li>
+                            <li>Images/PDFs only (analyze documents or whiteboards)</li>
+                            <li>Audio + Notes (enhanced context)</li>
+                            <li>Audio + Images (capture visual aids)</li>
+                            <li>All combined (complete multimodal analysis)</li>
+                        </ul>
                     </div>
                 </motion.div>
             </main>

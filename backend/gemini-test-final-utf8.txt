@@ -1,0 +1,137 @@
+﻿Using API Key starting with: AIza...
+--- Testing model: gemini-2.0-flash ---
+node : FAILED: 
+gemini-2.0-flash 
+error: 
+[GoogleGenerativeAI 
+Error]: Error 
+fetching from https:/
+/generativelanguage.g
+oogleapis.com/v1beta/
+models/gemini-2.0-fla
+sh:generateContent: 
+[429 Too Many 
+Requests] You 
+exceeded your 
+current quota, 
+please check your 
+plan and billing 
+details. For more 
+information on this 
+error, head to: https
+://ai.google.dev/gemi
+ni-api/docs/rate-limi
+ts. To monitor your 
+current usage, head 
+to: https://ai.dev/ra
+te-limit. 
+At line:1 char:1
++ node 
+test-gemini.js > gemi
+ni-test-final.txt 
+2>&1
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (FAILED:   
+  gemini-...ev/ra    
+te-limit. :Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+* Quota exceeded for 
+metric: generativelan
+guage.googleapis.com/
+generate_content_free
+_tier_requests, 
+limit: 0, model: 
+gemini-2.0-flash
+* Quota exceeded for 
+metric: generativelan
+guage.googleapis.com/
+generate_content_free
+_tier_requests, 
+limit: 0, model: 
+gemini-2.0-flash
+* Quota exceeded for 
+metric: generativelan
+guage.googleapis.com/
+generate_content_free
+_tier_input_token_cou
+nt, limit: 0, model: 
+gemini-2.0-flash
+Please retry in 
+46.741414907s. [{"@ty
+pe":"type.googleapis.
+com/google.rpc.Help",
+"links":[{"descriptio
+n":"Learn more about 
+Gemini API quotas","u
+rl":"https://ai.googl
+e.dev/gemini-api/docs
+/rate-limits"}]},{"@t
+ype":"type.googleapis
+.com/google.rpc.Quota
+Failure","violations"
+:[{"quotaMetric":"gen
+erativelanguage.googl
+eapis.com/generate_co
+ntent_free_tier_reque
+sts","quotaId":"Gener
+ateRequestsPerDayPerP
+rojectPerModel-FreeTi
+er","quotaDimensions"
+:{"location":"global"
+,"model":"gemini-2.0-
+flash"}},{"quotaMetri
+c":"generativelanguag
+e.googleapis.com/gene
+rate_content_free_tie
+r_requests","quotaId"
+:"GenerateRequestsPer
+MinutePerProjectPerMo
+del-FreeTier","quotaD
+imensions":{"location
+":"global","model":"g
+emini-2.0-flash"}},{"
+quotaMetric":"generat
+ivelanguage.googleapi
+s.com/generate_conten
+t_free_tier_input_tok
+en_count","quotaId":"
+GenerateContentInputT
+okensPerModelPerMinut
+e-FreeTier","quotaDim
+ensions":{"location":
+"global","model":"gem
+ini-2.0-flash"}}]},{"
+@type":"type.googleap
+is.com/google.rpc.Ret
+ryInfo","retryDelay":
+"46s"}]
+--- Testing model: gemini-flash-latest ---
+FAILED: 
+gemini-flash-latest 
+error: 
+[GoogleGenerativeAI 
+Error]: Error 
+fetching from https:/
+/generativelanguage.g
+oogleapis.com/v1beta/
+models/gemini-flash-l
+atest:generateContent
+: [503 Service 
+Unavailable] This 
+model is currently 
+experiencing high 
+demand. Spikes in 
+demand are usually 
+temporary. Please 
+try again later.
+--- Testing model: gemini-2.5-flash ---
+SUCCESS: gemini-2.5-flash working. Response: Hello! How can I help you today?

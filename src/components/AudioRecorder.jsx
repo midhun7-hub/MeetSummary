@@ -191,12 +191,12 @@ const AudioRecorder = ({ onUploadComplete, isProcessing }) => {
                                         const hasNotes = userNotes.trim().length > 0;
                                         const hasFiles = selectedImages.length > 0;
 
-                                        if (hasAudio && !hasNotes && !hasFiles) return "Generate Summary with Audio";
-                                        if (!hasAudio && hasNotes && !hasFiles) return "Generate Summary with Notes";
-                                        if (!hasAudio && !hasNotes && hasFiles) return `Generate with ${selectedImages.length === 1 ? 'Photo' : 'Photos/PDFs'}`;
-                                        if (hasAudio && (hasNotes || hasFiles)) return "Generate Multimodal Summary";
-                                        if (hasNotes && hasFiles) return "Generate with Notes & Files";
-                                        return "Generate Summary";
+                                        if (hasAudio && !hasNotes && !hasFiles) return "Transcribe Audio";
+                                        if (!hasAudio && hasNotes && !hasFiles) return "Prepare with Notes";
+                                        if (!hasAudio && !hasNotes && hasFiles) return `Prepare with ${selectedImages.length === 1 ? 'Photo' : 'Photos/PDFs'}`;
+                                        if (hasAudio && (hasNotes || hasFiles)) return "Process All Inputs";
+                                        if (hasNotes && hasFiles) return "Prepare with Notes & Files";
+                                        return "Prepare for Summary";
                                     })()}
                                 </span>
                             </button>

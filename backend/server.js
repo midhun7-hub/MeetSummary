@@ -29,10 +29,16 @@ app.use((req, res, next) => {
 // Database Connection
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 15000,
+        });
         console.log('[Backend - DB] MongoDB Connected Successfully');
     } catch (error) {
         console.error(`[Backend - DB Error]: ${error.message}`);
+        if (error.message.includes('timeout') || error.message.includes('MongooseServerSelectionError')) {
+            console.error('TIP: This often happens if your IP address is not whitelisted in MongoDB Atlas.');
+            console.error('Please visit https://cloud.mongodb.com/ and check "Network Access".');
+        }
         process.exit(1);
     }
 };
