@@ -59,13 +59,24 @@ const generateSummary = async (transcriptText = '', userNotes = '', imageUrls = 
     const model20 = genAI.getGenerativeModel({ model: "models/gemini-2.0-flash" });
     const model15 = genAI.getGenerativeModel({ model: "models/gemini-flash-latest" });
 
+    // Combine transcript and notes into one text block
+    let combinedText = '';
+    if (transcriptText && userNotes) {
+      combinedText = `${transcriptText}\n\n--- Additional Notes ---\n${userNotes}`;
+    } else if (transcriptText) {
+      combinedText = transcriptText;
+    } else if (userNotes) {
+      combinedText = userNotes;
+    } else {
+      combinedText = 'None provided.';
+    }
+
     const prompt = `
         You are an expert meeting assistant. Please analyze the following sources:
-        1. Meeting Transcript (from audio)
-        2. User manual notes
-        3. Attached images/PDFs (whiteboards, documents, slides)
+        1. Meeting Content (transcript from audio + manual notes)
+        2. Attached images/PDFs (whiteboards, documents, slides)
         
-        Combine the information from all available sources into one cohesive summary. Note that some sources might be missing (e.g., there might be no transcript, only notes and images). Use whatever is provided.
+        Combine the information from all available sources into one cohesive summary.
         
         Strictly follow this format with **bold headings** and clear spacing:
 
@@ -85,11 +96,8 @@ const generateSummary = async (transcriptText = '', userNotes = '', imageUrls = 
         2. (Action Item 2)
 
         ---
-        Meeting Transcript:
-        ${transcriptText || 'None provided.'}
-
-        User Manual Notes:
-        ${userNotes || 'None provided.'}
+        Meeting Content:
+        ${combinedText}
 
         Instruction: Integrate everything into a structured summary. Use Markdown for bolding and lists. Ensure there is an empty line between every major heading/section.
         `;
