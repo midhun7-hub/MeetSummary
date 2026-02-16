@@ -183,7 +183,7 @@ const Dashboard = () => {
                 {(isTranscribing || isSummarizing) && (
                     <div className="max-w-2xl mx-auto mb-8 text-center animate-pulse text-primary flex items-center justify-center gap-3">
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>{isTranscribing ? 'Converting Audio to Text...' : 'Gemini is craftsmanship your summary...'}</span>
+                        <span>{isTranscribing ? 'Converting Audio to Text...' : 'MeetSummary is crafting your summary...'}</span>
                     </div>
                 )}
 

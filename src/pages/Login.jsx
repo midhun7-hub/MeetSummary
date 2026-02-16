@@ -44,16 +44,16 @@ const Login = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-md glass-panel p-8 relative z-10 border border-white/10"
+                className="w-full max-w-md glass-panel p-6 sm:p-8 relative z-10 border border-white/10"
             >
-                <div className="flex justify-center mb-8">
+                <div className="flex justify-center mb-6 sm:mb-8">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/25">
                         <Mic className="w-6 h-6 text-white" />
                     </div>
                 </div>
 
-                <h2 className="text-3xl font-bold text-center mb-2">Welcome Back</h2>
-                <p className="text-gray-400 text-center mb-8">Sign in to continue to MeetSummary</p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2">Welcome Back</h2>
+                <p className="text-gray-400 text-center mb-6 sm:mb-8 text-sm sm:text-base">Sign in to continue to MeetSummary</p>
 
                 {error && (
                     <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded text-red-200 text-sm text-center">

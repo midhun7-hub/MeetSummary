@@ -1,6 +1,7 @@
 const Meeting = require('../models/Meeting');
 const { uploadAudio, transcribeAudio } = require('../services/transcriptionService');
 const { generateSummary } = require('../services/summarizationService');
+const { sendSummaryEmail } = require('../services/emailService');
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 
@@ -169,9 +170,49 @@ const getMeetingById = async (req, res) => {
     }
 };
 
+// @desc    Send meeting summary via email
+// @route   POST /api/meetings/:id/email
+// @access  Private
+const emailMeeting = async (req, res) => {
+    try {
+        const { recipientEmail } = req.body;
+
+        if (!recipientEmail) {
+            return res.status(400).json({ message: 'Recipient email is required' });
+        }
+
+        const meeting = await Meeting.findById(req.params.id);
+
+        if (!meeting) {
+            return res.status(404).json({ message: 'Meeting not found' });
+        }
+
+        // Check for user authorization
+        if (!req.user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+
+        if (meeting.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'User not authorized' });
+        }
+
+        // Send email
+        const timestamp = new Date(meeting.createdAt).toLocaleString();
+        await sendSummaryEmail(recipientEmail, meeting.title, meeting.summary, timestamp);
+
+        console.log(`[Backend - Controller] Email sent for meeting ${meeting._id} to ${recipientEmail}`);
+        res.json({ message: 'Email sent successfully', recipientEmail });
+
+    } catch (error) {
+        console.error('[Backend - Controller] Email Error:', error.message);
+        res.status(500).json({ message: error.message || 'Error sending email' });
+    }
+};
+
 module.exports = {
     transcribeMeeting,
     summarizeMeeting,
     getMeetings,
-    getMeetingById
+    getMeetingById,
+    emailMeeting
 };

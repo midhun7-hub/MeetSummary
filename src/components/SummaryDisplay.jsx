@@ -1,47 +1,214 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Download, Copy, Check } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Download, Copy, Mail, FileText, X, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import jsPDF from 'jspdf';
+import axios from 'axios';
 
 const SummaryDisplay = ({ meeting }) => {
+    const [copied, setCopied] = useState(false);
+    const [showEmailDialog, setShowEmailDialog] = useState(false);
+    const [recipientEmail, setRecipientEmail] = useState('');
+    const [sending, setSending] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [emailSuccess, setEmailSuccess] = useState(false);
+
     if (!meeting) return null;
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(meeting.summary);
-        // Could add a toast notification here
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
-    const downloadSummary = () => {
-        const element = document.createElement("a");
-        const file = new Blob([meeting.summary], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = `${meeting.title || 'summary'}.txt`;
-        document.body.appendChild(element);
-        element.click();
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 20;
+        const maxWidth = pageWidth - 2 * margin;
+
+        // Background - White
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+        // Top Left - MeetSummary Logo
+        doc.setFontSize(14);
+        doc.setTextColor(99, 102, 241); // Primary color
+        doc.setFont('helvetica', 'bold');
+        doc.text('MeetSummary', margin, 20);
+
+        // Top Right - Timestamp
+        doc.setFontSize(9);
+        doc.setTextColor(100, 100, 100);
+        doc.setFont('helvetica', 'normal');
+        const timestamp = new Date(meeting.createdAt).toLocaleString();
+        const timestampWidth = doc.getTextWidth(timestamp);
+        doc.text(timestamp, pageWidth - margin - timestampWidth, 20);
+
+        // Title - Big Purple Font
+        doc.setFontSize(20);
+        doc.setTextColor(168, 85, 247); // Purple/Secondary color
+        doc.setFont('helvetica', 'bold');
+        const title = meeting.title || 'Meeting Summary';
+        const titleLines = doc.splitTextToSize(title, maxWidth);
+        doc.text(titleLines, margin, 35);
+
+        // Divider line
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.5);
+        doc.line(margin, 45, pageWidth - margin, 45);
+
+        // Summary Content
+        let yPosition = 55;
+        doc.setFontSize(10);
+        doc.setTextColor(40, 40, 40);
+        doc.setFont('helvetica', 'normal');
+
+        // Parse and format the summary
+        const summaryLines = meeting.summary.split('\n');
+
+        summaryLines.forEach((line) => {
+            // Check if we need a new page
+            if (yPosition > pageHeight - 30) {
+                doc.addPage();
+                yPosition = 20;
+            }
+
+            // Handle headings (lines starting with # or **)
+            if (line.startsWith('# ')) {
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(168, 85, 247);
+                const headingText = line.replace('# ', '');
+                doc.text(headingText, margin, yPosition);
+                yPosition += 10;
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(40, 40, 40);
+            } else if (line.includes('**') && line.trim().length > 0) {
+                // Bold text
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(60, 60, 60);
+                const boldText = line.replace(/\*\*/g, '');
+                doc.text(boldText, margin, yPosition);
+                yPosition += 7;
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(40, 40, 40);
+            } else if (line.trim().length > 0) {
+                // Regular text
+                const textLines = doc.splitTextToSize(line, maxWidth);
+                textLines.forEach((textLine) => {
+                    if (yPosition > pageHeight - 30) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    doc.text(textLine, margin, yPosition);
+                    yPosition += 6;
+                });
+            } else {
+                // Empty line - add spacing
+                yPosition += 4;
+            }
+        });
+
+        // Footer
+        const totalPages = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(
+                `Generated by MeetSummary - Page ${i} of ${totalPages}`,
+                pageWidth / 2,
+                pageHeight - 10,
+                { align: 'center' }
+            );
+        }
+
+        // Save the PDF
+        const filename = `${meeting.title || 'summary'}_${new Date().toISOString().split('T')[0]}.pdf`;
+        doc.save(filename);
+    };
+
+    const shareViaEmail = async () => {
+        if (!recipientEmail) {
+            setEmailError('Please enter a valid email address');
+            return;
+        }
+
+        setSending(true);
+        setEmailError('');
+        setEmailSuccess(false);
+
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            await axios.post(
+                `http://localhost:5001/api/meetings/${meeting._id}/email`,
+                { recipientEmail },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                }
+            );
+
+            setEmailSuccess(true);
+            setTimeout(() => {
+                setShowEmailDialog(false);
+                setRecipientEmail('');
+                setEmailSuccess(false);
+            }, 2000);
+
+        } catch (error) {
+            setEmailError(error.response?.data?.message || 'Failed to send email');
+        } finally {
+            setSending(false);
+        }
     };
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-panel p-8 w-full max-w-4xl mx-auto"
+            className="glass-panel p-6 sm:p-8 w-full max-w-4xl mx-auto"
         >
-            <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-white/10 pb-4">
                 <div>
-                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    <h2 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                         {meeting.title || "Meeting Summary"}
                     </h2>
-                    <span className="text-gray-400 text-sm">
-                        {new Date(meeting.createdAt).toLocaleDateString()}
+                    <span className="text-gray-400 text-xs sm:text-sm">
+                        {new Date(meeting.createdAt).toLocaleString()}
                     </span>
                 </div>
 
-                <div className="flex gap-2">
-                    <button onClick={copyToClipboard} className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors" title="Copy">
-                        <Copy className="w-5 h-5" />
+                <div className="flex gap-2 flex-wrap">
+                    <button
+                        onClick={copyToClipboard}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors text-sm"
+                        title="Copy to clipboard"
+                    >
+                        <Copy className="w-4 h-4" />
+                        <span className="hidden sm:inline">{copied ? 'Copied!' : 'Copy'}</span>
                     </button>
-                    <button onClick={downloadSummary} className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors" title="Download">
-                        <Download className="w-5 h-5" />
+
+                    <button
+                        onClick={downloadPDF}
+                        className="flex items-center gap-2 px-3 py-2 bg-primary/10 hover:bg-primary/20 rounded-lg text-primary hover:text-white transition-colors text-sm font-medium"
+                        title="Download as PDF"
+                    >
+                        <FileText className="w-4 h-4" />
+                        <span className="hidden sm:inline">PDF</span>
+                    </button>
+
+                    <button
+                        onClick={() => setShowEmailDialog(true)}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-white transition-colors text-sm"
+                        title="Share via email"
+                    >
+                        <Mail className="w-4 h-4" />
+                        <span className="hidden sm:inline">Email</span>
                     </button>
                 </div>
             </div>
@@ -66,11 +233,102 @@ const SummaryDisplay = ({ meeting }) => {
             {meeting.transcript && (
                 <div className="mt-8 pt-6 border-t border-white/10">
                     <h3 className="text-lg font-semibold mb-2 text-gray-300">Transcript</h3>
-                    <div className="bg-dark/50 p-4 rounded-lg text-gray-400 text-sm max-h-60 overflow-y-auto whitespace-pre-wrap">
+                    <div className="bg-dark/50 p-4 rounded-lg text-gray-400 text-sm max-h-60 overflow-y-auto whitespace-pre-wrap scrollbar-hide">
                         {meeting.transcript}
                     </div>
                 </div>
             )}
+
+            {/* Email Dialog */}
+            <AnimatePresence>
+                {showEmailDialog && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="glass-panel p-6 w-full max-w-md border border-white/10"
+                        >
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-xl font-semibold">Share via Email</h3>
+                                <button
+                                    onClick={() => {
+                                        setShowEmailDialog(false);
+                                        setRecipientEmail('');
+                                        setEmailError('');
+                                        setEmailSuccess(false);
+                                    }}
+                                    className="p-1 hover:bg-white/5 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            {emailSuccess ? (
+                                <div className="text-center py-8">
+                                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Send className="w-8 h-8 text-green-400" />
+                                    </div>
+                                    <p className="text-green-400 font-medium">Email sent successfully!</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <p className="text-gray-400 text-sm mb-4">
+                                        Enter the recipient's email address to send this summary.
+                                    </p>
+
+                                    <input
+                                        type="email"
+                                        value={recipientEmail}
+                                        onChange={(e) => {
+                                            setRecipientEmail(e.target.value);
+                                            setEmailError('');
+                                        }}
+                                        placeholder="recipient@example.com"
+                                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all text-white placeholder-gray-500 mb-4"
+                                    />
+
+                                    {emailError && (
+                                        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-200 text-sm">
+                                            {emailError}
+                                        </div>
+                                    )}
+
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => {
+                                                setShowEmailDialog(false);
+                                                setRecipientEmail('');
+                                                setEmailError('');
+                                            }}
+                                            className="btn-secondary flex-1"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={shareViaEmail}
+                                            disabled={sending || !recipientEmail}
+                                            className="btn-primary flex-1 flex items-center justify-center gap-2"
+                                        >
+                                            {sending ? (
+                                                <>
+                                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                    <span>Sending...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Send className="w-4 h-4" />
+                                                    <span>Send</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };

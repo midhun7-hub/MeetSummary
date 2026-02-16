@@ -8,16 +8,78 @@
   body {
     @apply bg-darker text-white font-sans antialiased;
   }
+
+  /* Smooth scrolling for mobile */
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better touch targets for mobile */
+  button,
+  a {
+    @apply touch-manipulation;
+  }
 }
 
-.glass-panel {
-  @apply bg-surface/50 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl;
+@layer components {
+  .glass-panel {
+    @apply bg-surface/50 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium py-3 px-6 rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-h-[44px] active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-white/10 hover:bg-white/20 text-white font-medium py-3 px-6 rounded-lg transition-all backdrop-blur-sm border border-white/10 min-h-[44px] active:scale-95;
+  }
+
+  /* Mobile-friendly container */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Responsive text sizes */
+  .text-responsive-xl {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  .text-responsive-lg {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+
+  /* Mobile-friendly spacing */
+  .section-padding {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
+  }
+
+  /* Improved form inputs for mobile */
+  input,
+  textarea {
+    @apply text-base;
+    /* Prevents zoom on iOS */
+  }
 }
 
-.btn-primary {
-  @apply bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium py-2 px-6 rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
-}
+@layer utilities {
 
-.btn-secondary {
-  @apply bg-white/10 hover:bg-white/20 text-white font-medium py-2 px-6 rounded-lg transition-all backdrop-blur-sm border border-white/10;
+  /* Safe area insets for notched devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

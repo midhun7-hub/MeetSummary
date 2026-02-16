@@ -22,5 +22,6 @@ router.post('/summarize', protect, upload.array('images', 5), meetingController.
 
 router.get('/', protect, meetingController.getMeetings);
 router.get('/:id', protect, meetingController.getMeetingById);
+router.post('/:id/email', protect, meetingController.emailMeeting);
 
 module.exports = router;
