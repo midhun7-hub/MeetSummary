@@ -19,8 +19,8 @@ const Navbar = () => {
         <nav className="border-b border-white/10 bg-darker/80 backdrop-blur-md sticky top-0 z-50">
             <div className="container mx-auto h-16 flex items-center justify-between">
                 <Link to="/home" className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-tight">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/25">
-                        <Mic className="w-4 h-4 text-white" />
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                        <img src="/logo.png" alt="MeetSummary Logo" className="w-full h-full object-contain" />
                     </div>
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
                         MeetSummary

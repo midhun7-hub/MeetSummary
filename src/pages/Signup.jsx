@@ -49,8 +49,8 @@ const Signup = () => {
                 className="w-full max-w-md glass-panel p-8 relative z-10 border border-white/10"
             >
                 <div className="flex justify-center mb-8">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/25">
-                        <Mic className="w-6 h-6 text-white" />
+                    <div className="w-20 h-20 flex items-center justify-center">
+                        <img src="/logo.png" alt="MeetSummary Logo" className="w-full h-full object-contain" />
                     </div>
                 </div>
 
