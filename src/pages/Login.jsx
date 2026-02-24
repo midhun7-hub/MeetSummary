@@ -46,9 +46,15 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md glass-panel p-6 sm:p-8 relative z-10 border border-white/10"
             >
-                <div className="flex justify-center mb-6 sm:mb-8">
-                    <div className="w-20 h-20 flex items-center justify-center">
-                        <img src="/logo.png" alt="MeetSummary Logo" className="w-full h-full object-contain" />
+                <div className="flex justify-center mb-6 sm:mb-10">
+                    <div className="w-24 h-24 relative overflow-hidden rounded-2xl bg-[#09090b] border border-white/10 shadow-2xl">
+                        <div className="absolute inset-0 w-[130%] h-[130%] -left-[15%] -top-[18%]">
+                            <img
+                                src="/logo.png"
+                                alt="MeetSummary Logo"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
                     </div>
                 </div>
 

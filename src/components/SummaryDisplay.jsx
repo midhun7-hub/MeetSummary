@@ -32,11 +32,16 @@ const SummaryDisplay = ({ meeting }) => {
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-        // Top Left - MeetSummary Logo
-        doc.setFontSize(14);
+        // Top Left - MeetSummary Branding
+        doc.setFontSize(16);
         doc.setTextColor(99, 102, 241); // Primary color
         doc.setFont('helvetica', 'bold');
         doc.text('MeetSummary', margin, 20);
+
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.setFont('helvetica', 'italic');
+        doc.text('AI Meeting Insights', margin, 25);
 
         // Top Right - Timestamp
         doc.setFontSize(9);

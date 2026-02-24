@@ -6,7 +6,13 @@ import { Cpu, Shield, Zap, Database, FileText, Image, Mic, StickyNote } from 'lu
 const About = () => {
     const features = [
         {
-            icon: <Mic className="w-6 h-6 text-yellow-400" />,
+            icon: (
+                <div className="w-8 h-8 relative overflow-hidden rounded-lg bg-dark/50 border border-white/10">
+                    <div className="absolute inset-0 w-[130%] h-[130%] -left-[15%] -top-[18%]">
+                        <img src="/logo.png" alt="MeetSummary" className="w-full h-full object-contain" />
+                    </div>
+                </div>
+            ),
             title: "Audio Transcription",
             desc: "Powered by AssemblyAI, we convert your meeting recordings to text with high accuracy in seconds."
         },

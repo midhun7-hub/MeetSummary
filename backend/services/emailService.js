@@ -99,11 +99,15 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
                 <div class="email-container">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="left" style="padding-bottom: 20px;">
-                                <span style="color: #6366f1; font-size: 16px; font-weight: bold;">MeetSummary</span>
+                            <td align="left" style="padding-bottom: 30px; border-bottom: 2px solid #a855f7;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="color: #a855f7; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">MeetSummary</span>
+                                </div>
+                                <div style="color: #6b7280; font-size: 12px; margin-top: 4px; font-style: italic;">AI Meeting Assistant</div>
                             </td>
-                            <td align="right" style="padding-bottom: 20px;">
-                                <span style="color: #6b7280; font-size: 11px;">${timestamp}</span>
+                            <td align="right" style="padding-bottom: 30px; border-bottom: 2px solid #a855f7;">
+                                <span style="color: #9ca3af; font-size: 11px;">Ref: ${new Date().getTime().toString(16).toUpperCase()}</span><br>
+                                <span style="color: #6b7280; font-size: 12px; font-weight: 500;">${timestamp}</span>
                             </td>
                         </tr>
                     </table>
