@@ -27,7 +27,7 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="max-w-4xl mx-auto text-center"
                 >
-                    <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+                    <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-white to-orange-500">
                         Welcome, {user.name}
                     </h1>
                     <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -38,8 +38,8 @@ const Home = () => {
                     <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                         <Link to="/generate" className="group">
                             <div className="glass-panel p-8 h-full hover:bg-white/5 transition-all duration-300 border border-white/10 hover:border-primary/50">
-                                <div className="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <Mic className="w-7 h-7 text-blue-400" />
+                                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <Mic className="w-7 h-7 text-primary" />
                                 </div>
                                 <h3 className="text-2xl font-semibold mb-3">New Meeting</h3>
                                 <p className="text-gray-400">Record or upload audio to generate a new summary.</p>
@@ -47,9 +47,9 @@ const Home = () => {
                         </Link>
 
                         <Link to="/history" className="group">
-                            <div className="glass-panel p-8 h-full hover:bg-white/5 transition-all duration-300 border border-white/10 hover:border-purple/50">
-                                <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <List className="w-7 h-7 text-purple-400" />
+                            <div className="glass-panel p-8 h-full hover:bg-white/5 transition-all duration-300 border border-white/10 hover:border-primary/50">
+                                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <List className="w-7 h-7 text-primary" />
                                 </div>
                                 <h3 className="text-2xl font-semibold mb-3">View History</h3>
                                 <p className="text-gray-400">Access and manage your past meeting summaries.</p>

@@ -19,17 +19,17 @@ const Navbar = () => {
         <nav className="border-b border-white/10 bg-darker/80 backdrop-blur-md sticky top-0 z-50">
             <div className="container mx-auto h-16 flex items-center justify-between">
                 <Link to="/home" className="flex items-center gap-3 font-bold text-xl tracking-tight group">
-                    <div className="w-10 h-10 rounded-xl bg-darker flex items-center justify-center overflow-hidden border border-white/10 relative">
+                    <div className="w-10 h-10 flex items-center justify-center overflow-hidden relative">
                         {/* Cropping the logo to hide the bottom right watermark and keeping it clean */}
                         <div className="absolute inset-0 w-[120%] h-[120%] -left-[10%] -top-[12%]">
                             <img
                                 src="/logo.png"
                                 alt="MeetSummary"
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-contain mix-blend-lighten"
                             />
                         </div>
                     </div>
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-400">
                         MeetSummary
                     </span>
                 </Link>

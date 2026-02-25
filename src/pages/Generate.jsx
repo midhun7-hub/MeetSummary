@@ -106,7 +106,7 @@ const Dashboard = () => {
 
             <main className="container mx-auto px-4 pt-10">
                 <header className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-gray-400">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-orange-100 to-orange-500">
                         Turn Conversations into Action
                     </h1>
                 </header>

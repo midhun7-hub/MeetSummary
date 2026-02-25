@@ -1,15 +1,15 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
-import { Cpu, Shield, Zap, Database, FileText, Image, Mic, StickyNote } from 'lucide-react';
+import { Cpu, Shield, Zap, Database, FileText, Image, Mic, StickyNote, Mail } from 'lucide-react';
 
 const About = () => {
     const features = [
         {
             icon: (
-                <div className="w-8 h-8 relative overflow-hidden rounded-lg bg-dark/50 border border-white/10">
+                <div className="w-8 h-8 relative overflow-hidden flex items-center justify-center">
                     <div className="absolute inset-0 w-[130%] h-[130%] -left-[15%] -top-[18%]">
-                        <img src="/logo.png" alt="MeetSummary" className="w-full h-full object-contain" />
+                        <img src="/logo.png" alt="MeetSummary" className="w-full h-full object-contain mix-blend-lighten" />
                     </div>
                 </div>
             ),
@@ -17,29 +17,34 @@ const About = () => {
             desc: "Powered by AssemblyAI, we convert your meeting recordings to text with high accuracy in seconds."
         },
         {
-            icon: <Image className="w-6 h-6 text-pink-400" />,
+            icon: <Image className="w-6 h-6 text-orange-400" />,
             title: "Image & PDF OCR",
             desc: "Upload whiteboard photos, slides, or PDF documents. Our AI extracts and analyzes the content automatically."
         },
         {
-            icon: <StickyNote className="w-6 h-6 text-green-400" />,
+            icon: <StickyNote className="w-6 h-6 text-orange-400" />,
             title: "Manual Notes",
             desc: "Add your own notes alongside audio and images. Everything gets combined into one comprehensive summary."
         },
         {
-            icon: <Cpu className="w-6 h-6 text-blue-400" />,
+            icon: <Cpu className="w-6 h-6 text-orange-400" />,
             title: "Multimodal AI Summarization",
             desc: "Google Gemini analyzes audio transcripts, notes, images, and PDFs together to create structured summaries with action items."
         },
         {
-            icon: <Database className="w-6 h-6 text-purple-400" />,
+            icon: <Database className="w-6 h-6 text-orange-400" />,
             title: "Secure Storage",
             desc: "Your data is safely stored in MongoDB with user authentication, ensuring you can access your history anytime."
         },
         {
-            icon: <Shield className="w-6 h-6 text-indigo-400" />,
+            icon: <Shield className="w-6 h-6 text-orange-400" />,
             title: "Private & Safe",
             desc: "We prioritize your privacy with JWT authentication, secure file handling, and encrypted data transmission."
+        },
+        {
+            icon: <Mail className="w-6 h-6 text-orange-400" />,
+            title: "Email Reports",
+            desc: "Get your meeting summaries delivered straight to your inbox as soon as they are generated."
         }
     ];
 
@@ -76,7 +81,7 @@ const About = () => {
                         ))}
                     </div>
 
-                    <div className="mt-16 p-8 glass-panel rounded-2xl bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/20">
+                    <div className="mt-16 p-8 glass-panel rounded-2xl bg-gradient-to-br from-primary/10 to-orange-950/20 border border-primary/20">
                         <h2 className="text-2xl font-bold mb-4">How it Works</h2>
                         <ol className="list-decimal list-inside space-y-4 text-gray-300">
                             <li><strong>Record or Upload Audio</strong>: Use the built-in recorder or upload an existing audio file (optional).</li>
@@ -88,9 +93,9 @@ const About = () => {
                         </ol>
                     </div>
 
-                    <div className="mt-8 p-6 glass-panel rounded-2xl bg-gradient-to-br from-green-900/20 to-teal-900/20 border border-green-500/20">
+                    <div className="mt-8 p-6 glass-panel rounded-2xl bg-gradient-to-br from-orange-900/20 to-primary/10 border border-primary/20">
                         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                            <FileText className="w-6 h-6 text-green-400" />
+                            <FileText className="w-6 h-6 text-primary" />
                             Flexible Input Options
                         </h2>
                         <p className="text-gray-300 mb-3">

@@ -34,7 +34,7 @@ const SummaryDisplay = ({ meeting }) => {
 
         // Top Left - MeetSummary Branding
         doc.setFontSize(16);
-        doc.setTextColor(99, 102, 241); // Primary color
+        doc.setTextColor(249, 115, 22); // Primary color (Orange 500)
         doc.setFont('helvetica', 'bold');
         doc.text('MeetSummary', margin, 20);
 
@@ -51,9 +51,9 @@ const SummaryDisplay = ({ meeting }) => {
         const timestampWidth = doc.getTextWidth(timestamp);
         doc.text(timestamp, pageWidth - margin - timestampWidth, 20);
 
-        // Title - Big Purple Font
+        // Title - Big Orange Font
         doc.setFontSize(20);
-        doc.setTextColor(168, 85, 247); // Purple/Secondary color
+        doc.setTextColor(251, 146, 60); // Secondary color (Orange 400)
         doc.setFont('helvetica', 'bold');
         const title = meeting.title || 'Meeting Summary';
         const titleLines = doc.splitTextToSize(title, maxWidth);
@@ -84,7 +84,7 @@ const SummaryDisplay = ({ meeting }) => {
             if (line.startsWith('# ')) {
                 doc.setFontSize(16);
                 doc.setFont('helvetica', 'bold');
-                doc.setTextColor(168, 85, 247);
+                doc.setTextColor(249, 115, 22);
                 const headingText = line.replace('# ', '');
                 doc.text(headingText, margin, yPosition);
                 yPosition += 10;
@@ -180,7 +180,7 @@ const SummaryDisplay = ({ meeting }) => {
         >
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-white/10 pb-4">
                 <div>
-                    <h2 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    <h2 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-orange-400">
                         {meeting.title || "Meeting Summary"}
                     </h2>
                     <span className="text-gray-400 text-xs sm:text-sm">

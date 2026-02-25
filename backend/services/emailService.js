@@ -24,9 +24,9 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
 
         // Parse summary text to handle basic markdown-like formatting for the email
         const formattedSummary = summary
-            .replace(/^# (.*$)/gm, '<h2 style="color: #a855f7; font-size: 20px; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">$1</h2>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #4b5563;">$1</strong>')
-            .replace(/\n\n/g, '<div style="margin-bottom: 15px;"></div>')
+            .replace(/^#+ (.*$)/gm, '<h2 style="color: #f97316; font-size: 18px; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px;">$1</h2>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #1f2937;">$1</strong>')
+            .replace(/\n\n/g, '<div style="margin-bottom: 12px;"></div>')
             .replace(/\n/g, '<br>');
 
         // HTML email template
@@ -59,7 +59,7 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
                         margin-bottom: 30px;
                     }
                     .logo {
-                        color: #6366f1;
+                        color: #f97316;
                         font-size: 18px;
                         font-weight: bold;
                         text-decoration: none;
@@ -70,7 +70,7 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
                         text-align: right;
                     }
                     .main-title {
-                        color: #a855f7;
+                        color: #f97316;
                         font-size: 28px;
                         font-weight: 800;
                         margin: 0 0 15px 0;
@@ -99,15 +99,15 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
                 <div class="email-container">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="left" style="padding-bottom: 30px; border-bottom: 2px solid #a855f7;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <span style="color: #a855f7; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">MeetSummary</span>
+                            <td align="left" style="padding-bottom: 25px; border-bottom: 2px solid #f97316;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="color: #f97316; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">MeetSummary</span>
                                 </div>
-                                <div style="color: #6b7280; font-size: 12px; margin-top: 4px; font-style: italic;">AI Meeting Assistant</div>
+                                <div style="color: #6b7280; font-size: 11px; margin-top: 3px; font-style: italic;">AI Meeting Assistant</div>
                             </td>
-                            <td align="right" style="padding-bottom: 30px; border-bottom: 2px solid #a855f7;">
-                                <span style="color: #9ca3af; font-size: 11px;">Ref: ${new Date().getTime().toString(16).toUpperCase()}</span><br>
-                                <span style="color: #6b7280; font-size: 12px; font-weight: 500;">${timestamp}</span>
+                            <td align="right" style="padding-bottom: 25px; border-bottom: 2px solid #f97316;">
+                                <span style="color: #9ca3af; font-size: 10px;">Ref: ${new Date().getTime().toString(16).toUpperCase()}</span><br>
+                                <span style="color: #6b7280; font-size: 11px; font-weight: 500;">${timestamp}</span>
                             </td>
                         </tr>
                     </table>

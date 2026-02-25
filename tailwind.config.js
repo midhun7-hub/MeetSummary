@@ -7,11 +7,12 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#6366f1", // Indigo 500
-                secondary: "#a855f7", // Purple 500
-                dark: "#0f172a", // Slate 900
-                darker: "#020617", // Slate 950
-                surface: "#1e293b", // Slate 800
+                primary: "#f97316", // Orange 500
+                secondary: "#fb923c", // Orange 400
+                dark: "#000000ff", // Zinc 900 (Dark Black)
+                darker: "#040404", // Exact background color of logo.png
+                surface: "#18181b", // Zinc 900
+                grey: "#0d0d0d", // Deeper Zinc (Slightly lighter than pure black)
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],

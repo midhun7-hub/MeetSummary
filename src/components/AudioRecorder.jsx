@@ -82,9 +82,9 @@ const AudioRecorder = ({ onUploadComplete, isProcessing }) => {
     return (
         <div className="glass-panel p-6 w-full max-w-2xl mx-auto mb-8">
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
-                <div className="w-8 h-8 relative overflow-hidden rounded-lg bg-dark/50 border border-white/10">
+                <div className="w-8 h-8 relative overflow-hidden flex items-center justify-center">
                     <div className="absolute inset-0 w-[130%] h-[130%] -left-[15%] -top-[18%]">
-                        <img src="/logo.png" alt="MeetSummary" className="w-full h-full object-contain" />
+                        <img src="/logo.png" alt="MeetSummary" className="w-full h-full object-contain mix-blend-lighten" />
                     </div>
                 </div>
                 Capture Meeting
