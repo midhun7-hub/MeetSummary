@@ -149,7 +149,7 @@ const SummaryDisplay = ({ meeting }) => {
         try {
             const user = JSON.parse(localStorage.getItem('user'));
             await axios.post(
-                `http://localhost:5001/api/meetings/${meeting._id}/email`,
+                `http://127.0.0.1:5001/api/meetings/${meeting._id}/email`,
                 { recipientEmail },
                 {
                     headers: {
