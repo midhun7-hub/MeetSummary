@@ -4,6 +4,8 @@ import { Download, Copy, Mail, FileText, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import jsPDF from 'jspdf';
 import axios from 'axios';
+import API_BASE_URL from '../api/apiConfig';
+
 
 const SummaryDisplay = ({ meeting }) => {
     const [copied, setCopied] = useState(false);
@@ -149,7 +151,7 @@ const SummaryDisplay = ({ meeting }) => {
         try {
             const user = JSON.parse(localStorage.getItem('user'));
             await axios.post(
-                `http://127.0.0.1:5001/api/meetings/${meeting._id}/email`,
+                `${API_BASE_URL}/api/meetings/${meeting._id}/email`,
                 { recipientEmail },
                 {
                     headers: {

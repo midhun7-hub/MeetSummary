@@ -17,13 +17,27 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*', // For initial production debug, allows all origins. We can restrict this later.
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json()); // Parse JSON bodies
 
-// Logging Middleware
+// Enhanced Logging Middleware
 app.use((req, res, next) => {
-    console.log(`[Request] ${req.method} ${req.path}`);
+    const origin = req.headers.origin || 'No Origin';
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - Origin: ${origin}`);
     next();
+});
+
+// Health Check Endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'UP',
+        time: new Date().toISOString(),
+        mongodb: mongoose.connection.readyState === 1 ? 'CONNECTED' : 'DISCONNECTED'
+    });
 });
 
 // Database Connection
