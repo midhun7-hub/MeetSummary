@@ -3,6 +3,8 @@ import Navbar from '../components/Navbar';
 import AudioRecorder from '../components/AudioRecorder';
 import SummaryDisplay from '../components/SummaryDisplay';
 import axios from 'axios';
+import API_BASE_URL from '../api/apiConfig';
+
 import { Loader2, FileText, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
@@ -43,7 +45,7 @@ const Dashboard = () => {
                 const filename = audioBlob.name || 'recording.webm';
                 audioFormData.append('audio', audioBlob, filename);
 
-                const transResponse = await axios.post('http://localhost:5001/api/meetings/transcribe', audioFormData, {
+                const transResponse = await axios.post(`${API_BASE_URL}/api/meetings/transcribe`, audioFormData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${getToken()}`
@@ -82,7 +84,7 @@ const Dashboard = () => {
                 sumFormData.append('images', file);
             });
 
-            const sumResponse = await axios.post('http://localhost:5001/api/meetings/summarize', sumFormData, {
+            const sumResponse = await axios.post(`${API_BASE_URL}/api/meetings/summarize`, sumFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${getToken()}`

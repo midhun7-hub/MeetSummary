@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import SummaryDisplay from '../components/SummaryDisplay';
 import axios from 'axios';
+import API_BASE_URL from '../api/apiConfig';
+
 import { Loader2, Calendar, FileAudio } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -18,7 +20,7 @@ const History = () => {
             if (!token) return;
 
             try {
-                const response = await axios.get('http://localhost:5001/api/meetings', {
+                const response = await axios.get(`${API_BASE_URL}/api/meetings`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
