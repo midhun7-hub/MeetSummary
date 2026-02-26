@@ -11,12 +11,14 @@ const createTransporter = () => {
 
     return nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
+        port: 465,
+        secure: true, // Use SSL
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASSWORD // Use App Password for Gmail
-        }
+        },
+        // Force IPv4 as cloud providers (like Render) sometimes have issues with IPv6
+        family: 4
     });
 };
 
