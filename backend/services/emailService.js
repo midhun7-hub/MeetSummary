@@ -8,8 +8,8 @@ const axios = require('axios');
 const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp) => {
     try {
         console.log('[EmailService] Attempting to send summary via Brevo API...');
-        const apiKey = process.env.BREVO_API_KEY;
-        const senderEmail = process.env.SENDER_EMAIL || process.env.EMAIL_USER;
+        const apiKey = process.env.BREVO_API_KEY?.trim();
+        const senderEmail = (process.env.SENDER_EMAIL || process.env.EMAIL_USER)?.trim();
 
         if (!apiKey) {
             console.error('[EmailService] Error: BREVO_API_KEY is missing!');
