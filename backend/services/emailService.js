@@ -8,7 +8,8 @@ const axios = require('axios');
 const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp) => {
     try {
         console.log('[EmailService] Attempting to send summary via Brevo API...');
-        const apiKey = process.env.BREVO_API_KEY?.trim();
+        // Aggressively sanitize the API key to remove any hidden characters (newlines, spaces, etc.)
+        const apiKey = process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.replace(/[^a-zA-Z0-9-]/g, '').trim() : null;
         const senderEmail = (process.env.SENDER_EMAIL || process.env.EMAIL_USER)?.trim();
 
         if (!apiKey) {
@@ -16,6 +17,7 @@ const sendSummaryEmail = async (recipientEmail, meetingTitle, summary, timestamp
             throw new Error('BREVO_API_KEY is not defined in environment variables');
         }
 
+        console.log('[EmailService] API Key Length:', apiKey ? apiKey.length : 0);
         console.log('[EmailService] Using sender:', senderEmail);
         console.log('[EmailService] Recipient:', recipientEmail);
 
